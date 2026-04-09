@@ -1,0 +1,32 @@
+[org 0x7c00]
+
+; Grafikus mód beállítása (320x200, 256 szín)
+mov ax, 0x0013
+int 0x10
+
+; Háttér festése lime zöldre
+mov ax, 0xa000
+mov es, ax
+xor di, di
+mov al, 62      ; Lime zöld kódja
+mov cx, 64000
+rep stosb
+
+; Szöveg kiírása (VASKEDON)
+mov ah, 0x13
+mov al, 1
+mov bl, 13      ; Lila szín
+mov cx, 8       ; 8 karakter
+mov dl, 15      ; Oszlop
+mov dh, 12      ; Sor
+push cs
+pop es
+mov bp, vaskedon_szoveg
+int 0x10
+
+jmp $           ; Megállás
+
+vaskedon_szoveg db 'VASKEDON'
+
+times 510-($-$$) db 0
+dw 0xaa55
